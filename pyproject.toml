@@ -1,0 +1,41 @@
+[project]
+name = "pytmm"
+version = "0.1.0"
+dependencies = [
+    "numpy==2.5.3",
+    "scipy==1.18.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.16.7",
+    "scipy-stubs==1.18.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --strict-markers --capture=no"
+markers = [
+    "unit: unit tests",
+    "integration: integration tests",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+# Enable standard Pyflakes (F), pycodestyle (E, W), isort (I), pyupgrade (UP), and pydocstyle (D)
+select = ["F", "E", "W", "I", "UP", "D"]
+ignore = ["F403", "F405", "E731", "UP040", "D100", "D104"]
+
+[tool.ruff.lint.isort]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.format]
+quote-style = "double"
