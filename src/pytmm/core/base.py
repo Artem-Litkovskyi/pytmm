@@ -7,19 +7,20 @@ from typing import TypeAlias
 import numpy as np
 
 
-class ElementSide(StrEnum):
-    """Side of an 1D element."""
+class ElementEdge(StrEnum):
+    """Edge of an 1D element."""
 
     START = "start"
     END = "end"
 
 
-# Format: (element_i, ElementSide, state_var_i, coefficient)
-TMMEquationAddend: TypeAlias = tuple[int, ElementSide, int, float]
+# Format: (element_i, ElementEdge, state_var_i, coefficient)
+TMMEquationAddend: TypeAlias = tuple[int, ElementEdge, int, float]
 
 
+@dataclass(init=False)
 class TMMEquation:
-    """An equation that can be added to the TMM equation system."""
+    """An equation that can be added to the TMM system of equations."""
 
     def __init__(
         self,
@@ -31,14 +32,6 @@ class TMMEquation:
         else:
             self.left_side_addends = [left_side]
         self.right_side = right_side
-
-    def __repr__(self) -> str:
-        """Return an unambiguous representation of the equation."""
-        return (
-            f"{type(self).__name__}("
-            f"left_side_addends={self.left_side_addends!r}, "
-            f"right_side={self.right_side!r})"
-        )
 
 
 @dataclass(slots=True)
@@ -54,7 +47,7 @@ class TMMElement(ABC):
         Parameters
         ----------
         s
-            Local coordinate (from 0 to self.length).
+            Local coordinate from 0 to self.length.
         """
         pass
 

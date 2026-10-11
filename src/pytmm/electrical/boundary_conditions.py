@@ -1,4 +1,4 @@
-from pytmm.core.base import ElementSide, TMMEquation
+from pytmm.core.base import ElementEdge, TMMEquation
 from pytmm.electrical.constants import STATE_E
 
 
@@ -18,13 +18,13 @@ def electrical_circuit_boundary_node(
     # Fix inbound elements equal E
     for i in inbound_elements:
         eqs.append(
-            TMMEquation((i, ElementSide.END, STATE_E, 1), fixed_potential),
+            TMMEquation((i, ElementEdge.END, STATE_E, 1), fixed_potential),
         )
 
     # Fix outbound elements equal E
     for i in outbound_elements:
         eqs.append(
-            TMMEquation((i, ElementSide.START, STATE_E, 1), fixed_potential),
+            TMMEquation((i, ElementEdge.START, STATE_E, 1), fixed_potential),
         )
 
     return eqs

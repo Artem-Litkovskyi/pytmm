@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from pytmm.core.base import ElementSide, TMMEquation, TMMNode
+from pytmm.core.base import ElementEdge, TMMEquation, TMMNode
 from pytmm.electrical.constants import STATE_E, STATE_I
 
 
@@ -19,8 +19,8 @@ class ElectricalNode(TMMNode):
                 eqs.append(
                     TMMEquation(
                         [
-                            (el_0, ElementSide.END, STATE_E, 1),
-                            (el_i, ElementSide.END, STATE_E, -1),
+                            (el_0, ElementEdge.END, STATE_E, 1),
+                            (el_i, ElementEdge.END, STATE_E, -1),
                         ],
                         0
                     ),
@@ -33,8 +33,8 @@ class ElectricalNode(TMMNode):
                 eqs.append(
                     TMMEquation(
                         [
-                            (el_0, ElementSide.START, STATE_E, 1),
-                            (el_i, ElementSide.START, STATE_E, -1),
+                            (el_0, ElementEdge.START, STATE_E, 1),
+                            (el_i, ElementEdge.START, STATE_E, -1),
                         ],
                         0
                     ),
@@ -45,8 +45,8 @@ class ElectricalNode(TMMNode):
             eqs.append(
                 TMMEquation(
                     [
-                        (self.inbound_elements[0], ElementSide.END, STATE_E, 1),
-                        (self.outbound_elements[0], ElementSide.START, STATE_E, -1),
+                        (self.inbound_elements[0], ElementEdge.END, STATE_E, 1),
+                        (self.outbound_elements[0], ElementEdge.START, STATE_E, -1),
                     ],
                     0,
                 ),
@@ -56,9 +56,9 @@ class ElectricalNode(TMMNode):
         eqs.append(
             TMMEquation(
                 [
-                    *((i, ElementSide.END, STATE_I, 1) \
+                    *((i, ElementEdge.END, STATE_I, 1) \
                       for i in self.inbound_elements),
-                    *((i, ElementSide.START, STATE_I, -1) \
+                    *((i, ElementEdge.START, STATE_I, -1) \
                       for i in self.outbound_elements),
                 ],
                 0,

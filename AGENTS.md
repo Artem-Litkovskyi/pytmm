@@ -4,19 +4,19 @@ This document outlines the architectural patterns and mathematical precision rul
 
 ## 1. Core Stack
 * **Language:** Python 3.13
-* **Libraries:** `numpy` (calculations/arrays), `scipy` (advanced math/spatial).
+* **Libraries:** `numpy` (arrays), `scipy` (solvers).
 
 ## 2. Type Hinting & Precision
-* **Arrays:** Use `np.ndarray | Sequence[float]`.
 * **Scalars:** Use Python's built-in `float` for scalar type hints, not `np.float64`.
-* **Input Boundaries:** Functions accepting arrays must allow flexible sequence inputs and normalize them internally using `np.asarray(points, dtype=np.float64)`.
+* **Arrays:** Allow flexible sequence inputs `Sequence[float] | np.ndarray`. Normalize them internally using `np.asarray(points, dtype=np.float64)`.
+* **Scalar OR Array:** Use `np.typing.ArrayLike` when the function expects either a one value or an array of them. Use `np.isscalar(val)` for scalar check. Use `scalar = float(arr.item())` to get the scalar value.
 
 ## 3. Documentation
-* **Format:** Strictly use **NumPy-style** docstrings. Do not duplicate types in the docstring; let Python type hints in the signature act as the single source of truth.
-* **Content:** All public and private functions require comprehensive docstrings detailing mathematical constraints, expected coordinate frames, and expected array shapes (e.g., `(N, 3)`). If the function is simple and arguments are self-explanatory, the `Prameters` and `Returns` sections can be omitted.
+* **Format:** Strictly use **NumPy-style** docstrings. Do not duplicate types in the docstring (type hints are the single source of truth).
+* **Content:** All public functions require comprehensive docstrings detailing mathematical constraints and expected array shapes (e.g., `(N, 3)`). If the function is simple and its arguments are self-explanatory, the `Prameters` and `Returns` sections can be omitted. If the function is private the docstring can be absent.
 
 ## 4. Post-Editing Actions
-* **Linting:** Run `ruff check --fix .`.
+* **Linting:** Use `ruff check --fix .` command to automatically fix trivial rule breaks.
 
 ## 5. Standard Code Template Example
 
@@ -24,34 +24,35 @@ This document outlines the architectural patterns and mathematical precision rul
 from collections.abc import Sequence
 
 import numpy as np
-import numpy.typing as npt
 from scipy.spatial.transform import Rotation
 
 
-def generate_sweep_surface(
-    profile_curve: np.ndarray | Sequence[float],
-    path_curve: np.ndarray | Sequence[float],
-) -> np.ndarray:
-    """
-    Generate a 3D sweep surface by extruding a profile along a path.
+class SomeClass:
+    """Class docstring."""
+    
+    def __magic_methods__(self):
+        pass
+
+    def a_method(self):
+        """Then normal methods, in order of importance."""
+
+    def _private_method(self):
+        pass
+
+
+def process_coordinates(x: np.typing.ArrayLike) -> float | np.ndarray:
+    """Do something.
+    
+    A description with more details.
     
     Parameters
     ----------
-    profile_curve
-        2D or 3D coordinates forming the cross-section profile. 
-        Expected shape (M, 2) or (M, 3).
-    path_curve
-        3D coordinates representing the generation path. 
-        Expected shape (N, 3).
-        
-    Returns
-    -------
-    FloatArrayNumpy
-        3D mesh grid representing the evaluated surface with shape (N, M, 3).
+    x
+        Coordinate (coordinates).
     """
-    profile = np.asarray(profile_curve, dtype=np.float64)
-    path = np.asarray(path_curve, dtype=np.float64)
-
-    # Implementation follows...
-    return np.zeros((len(path), len(profile), 3), dtype=np.float64)
+    x_arr = np.asarray(x)
+    
+    if np.isscalar(x):
+        return float(x_arr.item())
+    return x_arr
 ```

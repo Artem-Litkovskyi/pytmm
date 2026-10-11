@@ -1,6 +1,6 @@
 import numpy as np
 
-from pytmm.core.base import ElementSide
+from pytmm.core.base import ElementEdge
 from pytmm.electrical.constants import STATE_E, STATE_I
 from pytmm.electrical.elements import ElectricalElement
 from pytmm.electrical.nodes import ElectricalNode
@@ -48,28 +48,28 @@ def test_electrical_node_conjugation_equations():
 
     # Equal potentials
     assert equations[0].left_side_addends == [
-        (3, ElementSide.END, STATE_E, 1),
-        (4, ElementSide.END, STATE_E, -1),
+        (3, ElementEdge.END, STATE_E, 1),
+        (4, ElementEdge.END, STATE_E, -1),
     ]
     assert equations[0].right_side == 0
 
     assert equations[1].left_side_addends == [
-        (6, ElementSide.START, STATE_E, 1),
-        (7, ElementSide.START, STATE_E, -1),
+        (6, ElementEdge.START, STATE_E, 1),
+        (7, ElementEdge.START, STATE_E, -1),
     ]
     assert equations[1].right_side == 0
 
     assert equations[2].left_side_addends == [
-        (3, ElementSide.END, STATE_E, 1),
-        (6, ElementSide.START, STATE_E, -1),
+        (3, ElementEdge.END, STATE_E, 1),
+        (6, ElementEdge.START, STATE_E, -1),
     ]
     assert equations[2].right_side == 0
 
     # The sum of inbound currents is equal to the sum of outbound currents
     assert equations[3].left_side_addends == [
-        (3, ElementSide.END, STATE_I, 1),
-        (4, ElementSide.END, STATE_I, 1),
-        (6, ElementSide.START, STATE_I, -1),
-        (7, ElementSide.START, STATE_I, -1),
+        (3, ElementEdge.END, STATE_I, 1),
+        (4, ElementEdge.END, STATE_I, 1),
+        (6, ElementEdge.START, STATE_I, -1),
+        (7, ElementEdge.START, STATE_I, -1),
     ]
     assert equations[3].right_side == 0

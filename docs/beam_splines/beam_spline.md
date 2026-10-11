@@ -3,7 +3,7 @@
 ## Overview
 This document outlines a mathematical framework for solving a continuous Euler-Bernoulli beam (a beam spline) constrained by specific node points using the **Transition Matrix Method (TMM)**. 
 
-By preserving the full state vectors at both ends of every segment (avoiding simplifications like the Three Moments Equation), this approach allows for the easy introduction of discontinuities, such as internal hinges or stepped displacements, later on.
+By preserving the full state vectors at both edges of every segment (avoiding simplifications like the Three Moments Equation), this approach allows for the easy introduction of discontinuities, such as internal hinges or stepped displacements, later on.
 
 ## State Vector
 The beam state at any cross-section is defined by the vector $W$:
@@ -15,8 +15,8 @@ Where:
 *   **$Q$**: Shear force
 
 ## Problem Geometry
-*   The beam is divided into $N$ segments, conjugated at $N+1$ node points at coordinates $t_i$.
-*   Each segment $i$ has two ends, represented by states $W_0^i$ (start) and $W_e^i$ (end).
+*   The beam is divided into $N$ segments with edges placed at $N+1$ points at coordinates $t_i$.
+*   Each segment $i$ has two edges, represented by states $W_0^i$ (start) and $W_e^i$ (end).
 *   The length of the $i$-th segment is $L_i = t^{i+1} - t^i$.
 *   This setup yields a total of **$2N$ state vectors**, or **$8N$ total unknowns**. To solve the system, we must construct exactly $8N$ linearly independent equations.
 
@@ -44,7 +44,7 @@ After the beam is solved and all $W_0^i$ are known, the same transition matrix c
 ---
 
 ## 2. Standard Conjugation Equations (4N - 4 equations)
-At each of the $N-1$ internal nodes, the end of the $i$-th segment meets the start of the $(i+1)$-th segment. To interpolate points $(t_i; \Pi_i)$ we construct such equations:
+At each of the $N-1$ nodes, the end of the $i$-th segment meets the start of the $(i+1)$-th segment. To interpolate points $(t_i; \Pi_i)$ we construct such equations:
 
 1.  **End of previous segment hits the node:**
     $$ w_e^i = \Pi_{i+1} $$
@@ -62,7 +62,7 @@ This provides **4 equations per internal node**, totaling $4(N-1) = 4N - 4$ equa
 ---
 
 ## 3. Extra Boundary Conditions (4 equations)
-To make the final system square ($8N$ equations for $8N$ unknowns), we must apply boundary conditions to the global start and end nodes.
+To make the final system square ($8N$ equations for $8N$ unknowns), we must apply boundary conditions:
 
 1.  **First node displacement:** $w_0^0 = \Pi_0$
 2.  **Last node displacement:** $w_e^{N-1} = \Pi_N$

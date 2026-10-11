@@ -1,6 +1,6 @@
 import numpy as np
 
-from pytmm.core.base import ElementSide
+from pytmm.core.base import ElementEdge
 from pytmm.core.result import TMMResult
 from pytmm.core.solver import TMMSolver
 from pytmm.electrical.boundary_conditions import electrical_circuit_boundary_node
@@ -8,6 +8,7 @@ from pytmm.electrical.constants import ELECTRICAL_STATE_SIZE
 from pytmm.electrical.elements import ElectricalElement
 from pytmm.electrical.nodes import ElectricalNode
 
+# Electrical circuit setup
 ELEMENTS = [
     ElectricalElement(1, 2, 2),  # 0. 2R resistor, 2E battery
     ElectricalElement(1, 6, 0),  # 1. 6R resistor
@@ -23,7 +24,8 @@ NODES = [
     ElectricalNode([1, 5], [2]),
 ]
 
-# Replace the last node with boundary conditions
+# Replace the last node with boundary conditions with a fixed potential
+# so that the system of equations has exactly one solution.
 BCS = electrical_circuit_boundary_node([3], [4, 5], 1)
 
 I1 = 9 / 14
@@ -34,26 +36,27 @@ E1 = 1.0
 E2 = 1.714285
 E3 = 0.0
 
-DESIRED_STATES_AT_NODES = np.array(
+# Start and end states for each element
+DESIRED_EDGE_STATES = np.array(
     [
-        E1, I1,     # Element 0
-        E2, I1,
-        E2, I3,     # Element 1
-        E3, I3,
-        E3, I2,     # Element 2
-        E1, I2,
-        E1, I2-I1,  # Element 3
-        E1, I2-I1,
-        E1, I3-I1,  # Element 4
-        E2, I3-I1,
-        E1, I2-I3,  # Element 5
-        E3, I2-I3,
+        [E1, I1],     # Element 0
+        [E2, I1],
+        [E2, I3],     # Element 1
+        [E3, I3],
+        [E3, I2],     # Element 2
+        [E1, I2],
+        [E1, I2-I1],  # Element 3
+        [E1, I2-I1],
+        [E1, I3-I1],  # Element 4
+        [E2, I3-I1],
+        [E1, I2-I3],  # Element 5
+        [E3, I2-I3],
     ]
 )
 
 
 def test_tmm_solver():
-    """Test TMMSolver.solve on an electrical circuit example."""
+    """Test TMMSolver.solve."""
     solver = TMMSolver(
         ELECTRICAL_STATE_SIZE,
         ELEMENTS,
@@ -64,49 +67,67 @@ def test_tmm_solver():
     result = solver.solve()
 
     np.testing.assert_allclose(
-        result.states_at_nodes, DESIRED_STATES_AT_NODES, rtol=1e-6, atol=1e-6
+        result.get_all_edge_states(),
+        DESIRED_EDGE_STATES,
+        rtol=1e-6,
+        atol=1e-6
     )
 
 
-def test_tmm_result_evaluate_at_nodes():
-    """Test TMMResult.evaluate on an electrical circuit example."""
-    result = TMMResult(ELEMENTS, DESIRED_STATES_AT_NODES)
+def test_tmm_result_evaluate_at_ends():
+    """Test TMMResult.evaluate at element ends."""
+    result = TMMResult(ELEMENTS, DESIRED_EDGE_STATES)
 
-    states_at_nodes = []
+    end_states = []
 
     for i in range(len(ELEMENTS)):
-        states_at_nodes.append(result.evaluate(i, 1))
+        end_states.append(result.evaluate(i, 1))
 
     np.testing.assert_allclose(
-        np.array(states_at_nodes).flatten(),
-        np.concatenate(
-            [
-                DESIRED_STATES_AT_NODES[i : i + 2]
-                for i in range(2, len(DESIRED_STATES_AT_NODES), 4)
-            ]
-        ),
+        np.array(end_states),
+        DESIRED_EDGE_STATES[1::2],
         rtol=1e-6,
         atol=1e-6,
     )
 
 
-def test_tmm_result_get_state_at_node():
-    """Test TMMResult.get_state_at_node on an electrical circuit example."""
-    result = TMMResult(ELEMENTS, DESIRED_STATES_AT_NODES)
+def test_tmm_result_get_edge_state():
+    """Test TMMResult.get_edge_state."""
+    result = TMMResult(ELEMENTS, DESIRED_EDGE_STATES)
 
     np.testing.assert_allclose(
-        result.get_state_at_node(0, ElementSide.START),
-        DESIRED_STATES_AT_NODES[0:2],
+        result.get_edge_state(0, ElementEdge.START),
+        DESIRED_EDGE_STATES[0],
     )
     np.testing.assert_allclose(
-        result.get_state_at_node(0, ElementSide.END),
-        DESIRED_STATES_AT_NODES[2:4],
+        result.get_edge_state(0, ElementEdge.END),
+        DESIRED_EDGE_STATES[1],
     )
     np.testing.assert_allclose(
-        result.get_state_at_node(0),
-        DESIRED_STATES_AT_NODES[0:4].reshape(2, 2),
+        result.get_edge_state(0),
+        DESIRED_EDGE_STATES[0:2],
     )
     np.testing.assert_allclose(
-        result.get_state_at_node([0, 2], ElementSide.START),
-        DESIRED_STATES_AT_NODES[[0, 1, 8, 9]].reshape(2, 2),
+        result.get_edge_state([0, 2], ElementEdge.START),
+        DESIRED_EDGE_STATES[[0, 4]],
+    )
+
+
+def test_tmm_result_get_all_edge_states():
+    """Test TMMResult.get_all_edge_states."""
+    result = TMMResult(ELEMENTS, DESIRED_EDGE_STATES)
+
+    np.testing.assert_allclose(
+        result.get_all_edge_states(),
+        DESIRED_EDGE_STATES,
+    )
+
+    np.testing.assert_allclose(
+        result.get_all_edge_states(ElementEdge.START),
+        DESIRED_EDGE_STATES[::2],
+    )
+
+    np.testing.assert_allclose(
+        result.get_all_edge_states(ElementEdge.END),
+        DESIRED_EDGE_STATES[1::2],
     )

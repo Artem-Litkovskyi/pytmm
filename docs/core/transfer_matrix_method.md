@@ -1,8 +1,8 @@
 # Transfer Matrix Method
 
-Given a system of connected 1D elements:
+Given a system of 1D elements connected at their edges:
 - $\vec{Y}^i(s)$ – state ($N \times 1$ vector) of an $i$-th element at a point $s$.
-- $\vec{Y}^i_0 = \vec{Y}^i(0)$ – state at the beginning of an $i$-th element.
+- $\vec{Y}^i_0 = \vec{Y}^i(0)$ – state at the start of an $i$-th element.
 - $\vec{Y}^i_e = \vec{Y}^i(s_e)$ – state at the end of an $i$-th element.
 
 The system is described by such equations:

@@ -2,7 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 import scipy.sparse.linalg as spla
 
-from .base import ElementSide, TMMElement, TMMEquation, TMMNode
+from .base import ElementEdge, TMMElement, TMMEquation, TMMNode
 from .result import TMMResult
 
 
@@ -30,7 +30,6 @@ class TMMSolver:
         unknowns_n = self._calculate_unknowns_n()
         transfer_eqs_n, conjugation_eqs_n, bcs_n = self._calculate_equations_n()
         equations_n = transfer_eqs_n + conjugation_eqs_n + bcs_n
-        print(unknowns_n, transfer_eqs_n, conjugation_eqs_n, bcs_n)
         if unknowns_n != equations_n:
             raise ValueError(
                 f"The number of unknowns ({unknowns_n}) "
@@ -42,30 +41,13 @@ class TMMSolver:
 
         self._global_matrix, self._right_vector = self._assemble_system()
 
-    def _calculate_unknowns_n(self):
-        """Calculate the number of unknowns."""
-        return 2 * self.state_size * len(self.elements)
+    def solve(self) -> TMMResult:
+        """Solves the boundary value problem and returns a standalone TMMResult."""
+        edge_states = spla.spsolve(self._global_matrix, self._right_vector)
 
-    def _calculate_equations_n(self):
-        """Calculate the number of equations."""
-        transfer_eqs_n = self.state_size * len(self.elements)
-        conjugation_eqs_n = sum([n.get_conjugation_eq_n() for n in self.nodes])
-        bcs_n = len(self.bcs)
-        return transfer_eqs_n, conjugation_eqs_n, bcs_n
-
-    def _global_matrix_index_of_state(
-        self, element_i: int, element_side: ElementSide
-    ) -> int:
-        """Calculate index in the global matrix for a beginning of a specific state."""
-        offset = int(element_side == ElementSide.END)
-        return self.state_size * (2 * element_i + offset)
-
-    def _global_matrix_index_of_var(
-        self, element_i: int, element_side: ElementSide, state_var_i: int
-    ) -> int:
-        """Calculate index in the global matrix for a specific state variable."""
-        return (
-            self._global_matrix_index_of_state(element_i, element_side) + state_var_i
+        return TMMResult(
+            elements=self.elements,
+            edge_states=edge_states,
         )
 
     def _assemble_system(self) -> tuple[sp.csr_matrix, np.ndarray]:
@@ -81,8 +63,8 @@ class TMMSolver:
         for el_i, element in enumerate(self.elements):
             tm_A, tm_b = element.get_transfer_eq(element.length)
 
-            idx_l = self._global_matrix_index_of_state(el_i, ElementSide.START)
-            idx_r = self._global_matrix_index_of_state(el_i, ElementSide.END)
+            idx_l = self._global_matrix_index_of_state(el_i, ElementEdge.START)
+            idx_r = self._global_matrix_index_of_state(el_i, ElementEdge.END)
 
             K[row : row + self.state_size, idx_l : idx_l + self.state_size] = -tm_A
             K[row : row + self.state_size, idx_r : idx_r + self.state_size] = np.eye(
@@ -114,11 +96,28 @@ class TMMSolver:
 
         return sp.csr_matrix(K), f
 
-    def solve(self) -> TMMResult:
-        """Solves the boundary value problem and returns a standalone TMMResult."""
-        node_states = spla.spsolve(self._global_matrix, self._right_vector)
+    def _calculate_unknowns_n(self):
+        """Calculate the number of unknowns."""
+        return 2 * self.state_size * len(self.elements)
 
-        return TMMResult(
-            elements=self.elements,
-            states_at_nodes=node_states,
+    def _calculate_equations_n(self):
+        """Calculate the number of equations."""
+        transfer_eqs_n = self.state_size * len(self.elements)
+        conjugation_eqs_n = sum([n.get_conjugation_eq_n() for n in self.nodes])
+        bcs_n = len(self.bcs)
+        return transfer_eqs_n, conjugation_eqs_n, bcs_n
+
+    def _global_matrix_index_of_state(
+        self, element_i: int, element_edge: ElementEdge
+    ) -> int:
+        """Calculate index in the global matrix for a beginning of a specific state."""
+        edge_offset = int(element_edge == ElementEdge.END)
+        return self.state_size * (2 * element_i + edge_offset)
+
+    def _global_matrix_index_of_var(
+        self, element_i: int, element_edge: ElementEdge, state_var_i: int
+    ) -> int:
+        """Calculate index in the global matrix for a specific state variable."""
+        return (
+            self._global_matrix_index_of_state(element_i, element_edge) + state_var_i
         )

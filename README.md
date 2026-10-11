@@ -8,7 +8,7 @@ This repository contains a Python implementation of TMM. It's intended for compl
 
 1. `pytmm.core` – TMM implementation [1].
 2. `pytmm.electrical` – TMM presets for solving electrical circuits [1] (used for testing `pytmm.core`).
-3. `pytmm.splines` – Implementation of beam splines [2].
+3. `pytmm.beam_splines` – Implementation of beam splines [2].
 
 ## Getting Started
 
@@ -22,8 +22,8 @@ pip install .
 
 1. `docs/core/transfer_matrix_method.md` – Transfer matrix method description [1, lecture 1].
 2. `docs/core/krylov_method.md` – Krylov method for constructing a transfer matrix for TMM [1, lecture 2].
-3. `docs/splines/beam_spline.md` – Beam splines description [2].
-4. `docs/splines/beam_spline_smoothing.md` – How to use beam splines for smoothing [2].
+3. `docs/beam_splines/beam_spline.md` – Beam splines description [2].
+4. `docs/beam_splines/beam_spline_smoothing.md` – How to use beam splines for smoothing [2].
 
 ## Literature
 
