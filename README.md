@@ -12,19 +12,62 @@ This repository contains a Python implementation of TMM. It's intended for compl
 
 ## 🚀 Getting Started
 
-1. Install from GitHub:
+### Normal Setup
 
-```
-pip install https://github.com/Artem-Litkovskyi/tmm-kit.git
-```
+1. Install the library from GitHub:
 
-2. Import:
+   ```bash
+   python -m pip install https://github.com/Artem-Litkovskyi/tmm-kit.git
+   ```
 
-```python
-import tmm_kit.tmm
-```
+### Development Setup
+
+1. Clone the repository and navigate to its root directory.
+
+   ```bash
+   git clone https://github.com/Artem-Litkovskyi/tmm-kit.git
+   cd tmm-kit
+   ```
+
+2. Create and activate a virtual environment.
+
+   ```bash
+   python -m venv .venv
+   ```
+
+   On Linux/macOS:
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   On Windows:
+
+   ```powershell
+   .venv\Scripts\activate
+   ```
+
+3. Install the library and its development dependencies.
+
+   ```bash
+   python -m pip install -e .
+   python -m pip install --group dev
+   ```
+
+4. Run the tests.
+
+   ```bash
+   python -m pytest
+   ```
+
+The editable installation allows you to modify the source code without reinstalling the library after each change. The development dependencies include the tools needed for testing and development.
+
 
 ## 💡 Documentation
+
+For library usage examples see scripts inside `tests`.
+
+The underlying math is documented here:
 
 1. `docs/tmm` – Transfer matrix method description [1, lecture 1].
 2. `docs/tmm` – Krylov method for constructing a transfer matrix for TMM [1, lecture 2].
