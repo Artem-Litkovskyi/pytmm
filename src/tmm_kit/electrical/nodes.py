@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from pytmm.core.base import ElementEdge, TMMEquation, TMMNode
-from pytmm.electrical.constants import STATE_E, STATE_I
+from tmm_kit.tmm.base import ElementEdge, TMMEquation, TMMNode
+from tmm_kit.electrical.constants import STATE_E, STATE_I
 
 
 @dataclass(slots=True)

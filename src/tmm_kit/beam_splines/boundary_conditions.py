@@ -1,10 +1,10 @@
-from pytmm.beam_splines.constants import (
+from tmm_kit.beam_splines.constants import (
     BEAM_DISPLACEMENT,
     BEAM_FORCE,
     BEAM_MOMENT,
     BEAM_SLOPE,
 )
-from pytmm.core.base import ElementEdge, TMMEquation
+from tmm_kit.tmm.base import ElementEdge, TMMEquation
 
 
 def pinned_ends(start_displacement, end_displacement):

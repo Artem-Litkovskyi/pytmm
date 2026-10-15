@@ -1,14 +1,14 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-from pytmm.beam_splines.constants import (
+from tmm_kit.beam_splines.constants import (
     BEAM_DISPLACEMENT,
     BEAM_FORCE,
     BEAM_MOMENT,
     BEAM_SLOPE,
     BEAM_STATE_SIZE,
 )
-from pytmm.core.base import ElementEdge, TMMEquation, TMMNode
+from tmm_kit.tmm.base import ElementEdge, TMMEquation, TMMNode
 
 
 @dataclass(slots=True, init=False)

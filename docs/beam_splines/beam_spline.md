@@ -29,15 +29,15 @@ $$ W_e^i = A(L_i) \cdot W_0^i $$
 
 When rearranged into the global matrix system as $W_e^i - A(L_i) \cdot W_0^i = 0$, this provides **4 equations per segment** (total of $4N$ equations).
 
-For a standard Euler-Bernoulli beam with constant stiffness $EI$, the matrix $A(l)$ is:
+For a standard Euler-Bernoulli beam with constant stiffness $EI$, the matrix $A(s)$ is:
 $$ A(t) = \begin{bmatrix} 
-1 & l & \frac{l^2}{2EI} & \frac{l^3}{6EI} \\ 
-0 & 1 & \frac{l}{EI} & \frac{l^2}{2EI} \\ 
-0 & 0 & 1 & l \\ 
+1 & s & \frac{s^2}{2EI} & \frac{s^3}{6EI} \\ 
+0 & 1 & \frac{s}{EI} & \frac{s^2}{2EI} \\ 
+0 & 0 & 1 & s \\ 
 0 & 0 & 0 & 1 
 \end{bmatrix} $$
 
-where $l \in [0; L_i]$ is a local coordinate.
+where $s \in [0; L_i]$ is a local coordinate.
 
 After the beam is solved and all $W_0^i$ are known, the same transition matrix can be used to **evaluate** the beam state $W$ in any point.
 

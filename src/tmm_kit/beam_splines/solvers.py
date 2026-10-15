@@ -2,11 +2,11 @@ from collections.abc import Sequence
 
 import numpy as np
 
-from pytmm.beam_splines.constants import BEAM_STATE_SIZE
-from pytmm.beam_splines.nodes import BeamSplineNode
-from pytmm.beam_splines.results import StatisticalBeamSplineResult
-from pytmm.core.base import TMMElement, TMMEquation
-from pytmm.core.solver import TMMSolver
+from tmm_kit.beam_splines.constants import BEAM_STATE_SIZE
+from tmm_kit.beam_splines.nodes import BeamSplineNode
+from tmm_kit.beam_splines.results import StatisticalBeamSplineResult
+from tmm_kit.tmm.base import TMMElement, TMMEquation
+from tmm_kit.tmm.solver import TMMSolver
 
 
 class StatisticalBeamSplineSolver:

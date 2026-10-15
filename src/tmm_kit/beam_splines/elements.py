@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from pytmm.beam_splines.constants import BEAM_STATE_SIZE
-from pytmm.core.base import TMMElement
+from tmm_kit.beam_splines.constants import BEAM_STATE_SIZE
+from tmm_kit.tmm.base import TMMElement
 
 
 @dataclass(slots=True)

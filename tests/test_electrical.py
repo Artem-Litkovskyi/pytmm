@@ -1,9 +1,9 @@
 import numpy as np
 
-from pytmm.core.base import ElementEdge
-from pytmm.electrical.constants import STATE_E, STATE_I
-from pytmm.electrical.elements import ElectricalElement
-from pytmm.electrical.nodes import ElectricalNode
+from tmm_kit.tmm.base import ElementEdge
+from tmm_kit.electrical.constants import STATE_E, STATE_I
+from tmm_kit.electrical.elements import ElectricalElement
+from tmm_kit.electrical.nodes import ElectricalNode
 
 
 def test_electrical_element_transfer_eq_for_resistor():

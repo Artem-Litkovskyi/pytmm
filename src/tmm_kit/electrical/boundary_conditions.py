@@ -1,5 +1,5 @@
-from pytmm.core.base import ElementEdge, TMMEquation
-from pytmm.electrical.constants import STATE_E
+from tmm_kit.tmm.base import ElementEdge, TMMEquation
+from tmm_kit.electrical.constants import STATE_E
 
 
 def electrical_circuit_boundary_node(

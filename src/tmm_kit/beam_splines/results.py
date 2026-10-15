@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from pytmm.core.base import ElementEdge
-from pytmm.core.result import TMMResult
+from tmm_kit.tmm.base import ElementEdge
+from tmm_kit.tmm.result import TMMResult
 
 
 @dataclass

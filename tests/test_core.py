@@ -1,12 +1,12 @@
 import numpy as np
 
-from pytmm.core.base import ElementEdge
-from pytmm.core.result import TMMResult
-from pytmm.core.solver import TMMSolver
-from pytmm.electrical.boundary_conditions import electrical_circuit_boundary_node
-from pytmm.electrical.constants import ELECTRICAL_STATE_SIZE
-from pytmm.electrical.elements import ElectricalElement
-from pytmm.electrical.nodes import ElectricalNode
+from tmm_kit.tmm.base import ElementEdge
+from tmm_kit.tmm.result import TMMResult
+from tmm_kit.tmm.solver import TMMSolver
+from tmm_kit.electrical.boundary_conditions import electrical_circuit_boundary_node
+from tmm_kit.electrical.constants import ELECTRICAL_STATE_SIZE
+from tmm_kit.electrical.elements import ElectricalElement
+from tmm_kit.electrical.nodes import ElectricalNode
 
 # Electrical circuit setup
 ELEMENTS = [

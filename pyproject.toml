@@ -1,5 +1,5 @@
 [project]
-name = "pytmm"
+name = "tmm-kit"
 version = "0.1.0"
 dependencies = [
     "numpy==2.5.3",

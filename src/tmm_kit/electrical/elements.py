@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from pytmm.core.base import TMMElement
+from tmm_kit.tmm.base import TMMElement
 
 
 @dataclass(slots=True)

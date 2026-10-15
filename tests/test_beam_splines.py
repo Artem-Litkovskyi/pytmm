@@ -1,9 +1,9 @@
 import numpy as np
 
-from pytmm.beam_splines.boundary_conditions import pinned_ends
-from pytmm.beam_splines.elements import BeamElement
-from pytmm.beam_splines.nodes import BeamPinnedSupport
-from pytmm.beam_splines.solvers import StatisticalBeamSplineSolver
+from tmm_kit.beam_splines.boundary_conditions import pinned_ends
+from tmm_kit.beam_splines.elements import BeamElement
+from tmm_kit.beam_splines.nodes import BeamPinnedSupport
+from tmm_kit.beam_splines.solvers import StatisticalBeamSplineSolver
 
 # Three points (two elements)
 T = [2, 4, 5]

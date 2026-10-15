@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pytmm.iml" filepath="$PROJECT_DIR$/.idea/pytmm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/tmm-kit.iml" filepath="$PROJECT_DIR$/.idea/tmm-kit.iml" />
     </modules>
   </component>
 </project>
