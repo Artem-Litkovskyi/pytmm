@@ -123,22 +123,22 @@ class BeamElementOnElasticFoundation(TMMElement):
         """Return the transfer matrix K and right vector f."""
         g = self.bandwidth
 
-        ksi = s / np.sqrt(2) / g
+        xi = s / np.sqrt(2) / g
 
         g2 = g * g
         g3 = g2 * g
         g4 = g3 * g
 
-        cos_ksi = np.cos(ksi)
-        sin_ksi = np.sin(ksi)
+        cos_xi = np.cos(xi)
+        sin_xi = np.sin(xi)
 
-        ch_ksi = np.cosh(ksi)
-        sh_ksi = np.sinh(ksi)
+        ch_xi = np.cosh(xi)
+        sh_xi = np.sinh(xi)
 
-        k1 = ch_ksi * cos_ksi
-        k2 = g / np.sqrt(2) * (sh_ksi * cos_ksi + ch_ksi * sin_ksi)
-        k3 = g2 * sh_ksi * sin_ksi
-        k4 = g3 / np.sqrt(2) * (ch_ksi * sin_ksi - sh_ksi * cos_ksi)
+        k1 = ch_xi * cos_xi
+        k2 = g / np.sqrt(2) * (sh_xi * cos_xi + ch_xi * sin_xi)
+        k3 = g2 * sh_xi * sin_xi
+        k4 = g3 / np.sqrt(2) * (ch_xi * sin_xi - sh_xi * cos_xi)
 
         K = np.array(
             [

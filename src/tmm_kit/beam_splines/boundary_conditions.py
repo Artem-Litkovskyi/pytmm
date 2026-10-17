@@ -30,6 +30,31 @@ def clamped_ends(
     ]
 
 
+def elastic_ends(
+    start_displacement, end_displacement,
+    start_stiffness, end_stiffness,
+):
+    """Elastic supports at both ends (zero moments, spring forces)."""
+    return [
+        TMMEquation((0, ElementEdge.START, BEAM_MOMENT, 1), 0),
+        TMMEquation((-1, ElementEdge.END, BEAM_MOMENT, 1), 0),
+        TMMEquation(
+            [
+                (0, ElementEdge.START, BEAM_FORCE, 1),
+                (0, ElementEdge.START, BEAM_DISPLACEMENT, start_stiffness),
+            ],
+            start_stiffness * start_displacement,
+        ),
+        TMMEquation(
+            [
+                (-1, ElementEdge.END, BEAM_FORCE, 1),
+                (-1, ElementEdge.END, BEAM_DISPLACEMENT, -end_stiffness),
+            ],
+            -end_stiffness * end_displacement,
+        ),
+    ]
+
+
 def free_ends():
     """No supports at both ends (zero moments and forces)."""
     return [

@@ -45,7 +45,7 @@ class StatisticalBeamSplineResult:
             return states[0]
         return states
 
-    def get_state_at_node(
+    def get_edge_state(
         self,
         element_i: np.typing.ArrayLike,
         element_edge: ElementEdge | None = None,

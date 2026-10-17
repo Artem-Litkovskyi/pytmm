@@ -8,6 +8,7 @@ from tmm_kit.beam_splines.constants import (
     BEAM_SLOPE,
     BEAM_STATE_SIZE,
 )
+from tmm_kit.beam_splines.utils import adaptive_stiffness
 from tmm_kit.tmm.base import ElementEdge, TMMEquation, TMMNode
 
 
@@ -86,23 +87,17 @@ class BeamElasticSupport(BeamSplineNode):
     ----------
     displacement
         Support displacement at the node.
-    next_length
-        The length of the outbound element.
-        The support stiffness adapts proportional to this value.
-    bandwidth
-        A smoothing bandwidth (g) that controls the support stiffness.
+    stiffness
+        Spring stiffness of the support.
     """
 
     displacement: float
-    next_length: float
-    bandwidth: float
+    stiffness: float
 
     def get_conjugation_eq(self) -> list[TMMEquation]:
         """Return the conjugation equations connecting elements."""
         in_el = self.inbound_elements[0]
         out_el = self.outbound_elements[0]
-
-        k = self.next_length / self.bandwidth ** 4
 
         return [
             _continuity_equation(in_el, out_el, BEAM_DISPLACEMENT),
@@ -110,11 +105,11 @@ class BeamElasticSupport(BeamSplineNode):
             _continuity_equation(in_el, out_el, BEAM_MOMENT),
             TMMEquation(
                 [
-                    (in_el, ElementEdge.END, BEAM_FORCE, 1),
-                    (out_el, ElementEdge.START, BEAM_FORCE, -1),
-                    (out_el, ElementEdge.START, BEAM_DISPLACEMENT, -k),
+                    (out_el, ElementEdge.START, BEAM_FORCE, 1),
+                    (in_el, ElementEdge.END, BEAM_FORCE, -1),
+                    (in_el, ElementEdge.END, BEAM_DISPLACEMENT, self.stiffness),
                 ],
-                -k * self.displacement,
+                self.stiffness * self.displacement,
             ),
         ]
 
